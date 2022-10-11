@@ -38,6 +38,7 @@ baseline_mean_frequency = np.mean(baseline_frequency)
 print("Baseline data processing ended")
 
 media = vlc.MediaPlayer("NF Video.mp4")
+#media.audio_set_mute(True)
 
 check = True
 #in_data_check = True # condition for initial 4 seconds data check
