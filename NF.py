@@ -14,8 +14,6 @@ NFB_reached = []
 
 name = input("Enter user name (Same as used for baseline recording): ")
 
-nf_channel = input("Enter the Neurofeedback Channel Number Corresponding to MITSAR Montage (Ref 40 GND): ")
-
 NF_time = int(input("Enter the time duration for NF session: "))
 
 NFB_Day = input("Enter Neurofeedback Day Number: ")
@@ -31,11 +29,18 @@ wL = 4 * Fs
 nf_channel = 2
 
 pwelch = signal.welch(baseline_raw_array[nf_channel], fs=Fs, window='hanning', nperseg=wL, noverlap=wL/2, nfft=wL)
-baseline_frequency = pwelch[1]
 
-baseline_mean_frequency = np.mean(baseline_frequency)
+baseline_beta1 = pwelch[1][int(wL*12/Fs) : int((wL*15/Fs)) + 1] # +1 due to python run till last index -1  
+
+baseline_mean_frequency = np.mean(baseline_beta1)
 
 print("Baseline data processing ended")
+
+print("Waiting....")
+
+print("Starting Neurofeedback in next 10 seconds..")
+
+time.sleep(10)
 
 media = vlc.MediaPlayer("NF Video.mp4")
 #media.audio_set_mute(True)
@@ -84,8 +89,10 @@ try:
                 Nfft=len(realtime_data_in_array)
 
             real_pwelch = signal.welch(realtime_data_in_array, fs=50, window='hanning', nperseg=Nperseg, noverlap=Noverlap, nfft=Nfft)
+                                   
+            real_beta1 = real_pwelch[1][int(Nfft*12/Fs) : int((Nfft*15/Fs)) + 1] # +1 due to python run till last index -1 
             
-            realtime_mean_frequency = np.mean(real_pwelch[1]) # having final data
+            realtime_mean_frequency = np.mean(real_beta1) # having final data
             
             complete_nf_mean_frequencies.append(realtime_mean_frequency)
             #a = current_data_sample
@@ -115,6 +122,8 @@ try:
             media.pause()
             check = False
             media.stop()
+            
+            print("Neurofeedback trial have been completed")
             
             NF_time_df = pd.DataFrame((time_stamp), columns = ['Time Stamps'])
             sample_df = pd.DataFrame(complete_samples)
