@@ -30,9 +30,9 @@ nf_channel = 2
 
 pwelch = signal.welch(baseline_raw_array[nf_channel], fs=Fs, window='hanning', nperseg=wL, noverlap=wL/2, nfft=wL)
 
-baseline_beta1 = pwelch[1][int(wL*12/Fs) : int((wL*15/Fs)) + 1] # +1 due to python run till last index -1  
+baseline_beta = pwelch[1][int(wL*12/Fs) : int((wL*15/Fs)) + 1] # +1 due to python run till last index -1  
 
-baseline_mean_frequency = np.mean(baseline_beta1)
+baseline_mean_frequency = np.mean(baseline_beta)
 
 print("Baseline data processing ended")
 
@@ -90,9 +90,9 @@ try:
 
             real_pwelch = signal.welch(realtime_data_in_array, fs=50, window='hanning', nperseg=Nperseg, noverlap=Noverlap, nfft=Nfft)
                                    
-            real_beta1 = real_pwelch[1][int(Nfft*12/Fs) : int((Nfft*15/Fs)) + 1] # +1 due to python run till last index -1 
+            real_beta = real_pwelch[1][int(Nfft*15/Fs) : int((Nfft*20/Fs)) + 1] # +1 due to python run till last index -1 
             
-            realtime_mean_frequency = np.mean(real_beta1) # having final data
+            realtime_mean_frequency = np.mean(real_beta) # having final data
             
             complete_nf_mean_frequencies.append(realtime_mean_frequency)
             #a = current_data_sample
