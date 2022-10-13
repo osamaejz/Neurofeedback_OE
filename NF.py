@@ -16,17 +16,19 @@ name = input("Enter user name (Same as used for baseline recording): ")
 
 NF_time = int(input("Enter the time duration for NF session: "))
 
-NFB_Day = input("Enter Neurofeedback Day Number: ")
+NF_Channel = int(input("Enter the time duration for NF session (in seconds): "))
+
+NFB_Day = int(input("Enter Neurofeedback Day Number: "))
 
 Session_no = input("Enter Session Number: ")
 
-NF_file_name = 'NF' + NFB_Day + '_Ses' + Session_no + '_' + name + ".csv"
+NF_file_name = 'NF' + str(NFB_Day) + '_Ses' + str(Session_no) + '_' + str(name) + ".csv"
 
-baseline_raw_array = np.transpose(np.array(pd.read_csv('User Data/Pre_Baseline_' + name + '.csv')))
+baseline_raw_array = np.transpose(np.array(pd.read_csv('User Data/Pre_Baseline_' + str(name) + '.csv')))
 
 Fs = 500
 wL = 4 * Fs
-nf_channel = 2
+nf_channel = NF_Channel - 1
 
 pwelch = signal.welch(baseline_raw_array[nf_channel], fs=Fs, window='hanning', nperseg=wL, noverlap=wL/2, nfft=wL)
 
@@ -134,7 +136,7 @@ try:
             NFB_frequency_df = pd.DataFrame((complete_nf_mean_frequencies), columns = ['NFB Mean Frequency'])
             Performance_df = pd.DataFrame((NFB_reached), columns = ['NFB_Score'])
             other_data_df = pd.concat((Current_df,NFB_frequency_df,Performance_df), axis =1)
-            other_data_df.to_csv('User Data/' + 'NF_details_' + name + '.csv' )
+            other_data_df.to_csv('User Data/' + 'NF' + str(NFB_Day) + '_Ses' + str(Session_no) +'_NF_details_' + str(name) + '.csv' )
             
                                    
 except KeyboardInterrupt as e:
