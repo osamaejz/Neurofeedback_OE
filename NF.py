@@ -14,9 +14,9 @@ NFB_reached = []
 
 name = input("Enter user name (Same as used for baseline recording): ")
 
-NF_time = int(input("Enter the time duration for NF session: "))
+NF_time = int(input("Enter the time duration for NF session (in seconds): "))
 
-NF_Channel = int(input("Enter the time duration for NF session (in seconds): "))
+NF_Channel = int(input("Enter the NF Channel (Should be within selected Montage and as per the Electrode list of Data Studio): "))
 
 NFB_Day = int(input("Enter Neurofeedback Day Number: "))
 
