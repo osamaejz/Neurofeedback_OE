@@ -18,11 +18,13 @@ NF_time = int(input("Enter the time duration for NF session (in seconds): "))
 
 NF_Channel = int(input("Enter the NF Channel (Should be within selected Montage and as per the Electrode list of Data Studio): "))
 
+NF_threshold = int(input("Enter the NFB threshold value: "))
+
 NFB_Day = int(input("Enter Neurofeedback Day Number: "))
 
-Session_no = input("Enter Session Number: ")
+Session_no = int(input("Enter Session Number: "))
 
-NF_file_name = 'NF' + str(NFB_Day) + '_Ses' + str(Session_no) + '_' + str(name) + ".csv"
+NF_file_name = 'NF' + str(NFB_Day) + '_Ses' + str(Session_no) + '_' + str(name) + '.csv'
 
 baseline_raw_array = np.transpose(np.array(pd.read_csv('User Data/Pre_Baseline_' + str(name) + '.csv')))
 
@@ -34,7 +36,7 @@ pwelch = signal.welch(baseline_raw_array[nf_channel], fs=Fs, window='hanning', n
 
 baseline_beta = pwelch[1][int(wL*12/Fs) : int((wL*15/Fs)) + 1] # +1 due to python run till last index -1  
 
-baseline_mean_frequency = np.mean(baseline_beta)
+baseline_mean_frequency = (np.mean(baseline_beta)) * (NF_threshold/100)
 
 print("Baseline data processing ended")
 
