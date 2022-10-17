@@ -41,7 +41,7 @@ pwelch = signal.welch(baseline_raw_array[nf_channel], fs=Fs, window='hanning', n
 
 baseline_beta = pwelch[1][int(wL*15/Fs) : int((wL*20/Fs)) + 1] # +1 due to python run till last index -1  
 
-baseline_mean_frequency = np.mean(baseline_beta) + (np.mean(baseline_beta)) * (NF_threshold/100) # As per protocol
+baseline_mean_frequency = np.mean(baseline_beta) + (np.mean(baseline_beta) * (NF_threshold/100)) # As per protocol
 #for the above line, we want to increase the beta band by the input threshold percentage
 
 print("Baseline data processing ended")
