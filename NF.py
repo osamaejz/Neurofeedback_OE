@@ -1,3 +1,8 @@
+
+from IPython import get_ipython; 
+get_ipython().magic('reset -sf')# to clear all variables 
+
+
 from pylsl import StreamInlet, resolve_stream
 import numpy as np
 import pandas as pd
@@ -50,6 +55,8 @@ time.sleep(10)
 media = vlc.MediaPlayer("NF Video.mp4")
 #media.audio_set_mute(True)
 
+video_state = 1
+
 check = True
 #in_data_check = True # condition for initial 4 seconds data check
 try:
@@ -58,13 +65,17 @@ try:
     print("Starting Realtime NFB")
     print("looking for an EEG stream...")
     
+    media.play()
+    # time.sleep(2)
+    # media.pause()
+    
     streams = resolve_stream('type', 'EEG')
     # create a new inlet to read from the stream
     inlet = StreamInlet(streams[0])
     t1 = time.time()
     t3 = time.time()
     realtime_mean_frequency = 0
-    first_play = 1
+    #first_play = 1
     
     while check:
     # get a new sample (you can also omit the timestamp part if you're not
@@ -87,44 +98,57 @@ try:
             Nperseg = 50*2
             Noverlap=(50*2)/2
             Nfft=50*2
+            FS = 50
             
             if (t2-t1 >= NF_time):
                 Nperseg = len(realtime_data_in_array)
                 Noverlap=0
                 Nfft=len(realtime_data_in_array)
 
-            real_pwelch = signal.welch(realtime_data_in_array, fs=50, window='hanning', nperseg=Nperseg, noverlap=Noverlap, nfft=Nfft)
+            real_pwelch = signal.welch(realtime_data_in_array, fs=FS, window='hanning', nperseg=Nperseg, noverlap=Noverlap, nfft=Nfft)
                                    
-            real_beta = real_pwelch[1][int(Nfft*15/Fs) : int((Nfft*20/Fs)) + 1] # +1 due to python run till last index -1 
+            ind1 = np.where(real_pwelch[0] == 15)
+            ind2 = np.where(real_pwelch[0] == 20)
+            
+            real_beta = real_pwelch[1][ind1[0][0] : ind2[0][0] + 1] # +1 due to python run till last index -1 
+            
+            #real_beta = real_pwelch[1][int(Nfft*15/FS) : int((Nfft*20/FS)) + 1] # +1 due to python run till last index -1 
             
             realtime_mean_frequency = np.mean(real_beta) # having final data
             
             complete_nf_mean_frequencies.append(realtime_mean_frequency)
             #a = current_data_sample
-            current_data_sample = []
             
-        if(first_play == 1):
-            first_play = 2
-            media.play()    
-            print("first")
+            
+        # if(first_play == 1):
+        #     first_play = 2
+        #     media.play()    
+        #     print("first")
        
-        print (t2-t1)
+        #print (t2-t1)
+        print('Real time raw signal: ' + str(sample[nf_channel]))    
+        print('Real time NFB Frequency: ' + str(realtime_mean_frequency))
+        
         if realtime_mean_frequency  > baseline_mean_frequency:
             media.play()
             NFB_reached.append(1)
             print("Excelent! You are doing great")
+            video_state = 1
                         
         else:
             
              print("You are going wrong.. ")
-             media.pause()
+             if (video_state == 1):
+                 media.pause()
+                 video_state = 0
+        
              NFB_reached.append(0)
         #print(np.shape(complete_samples)[0])
         #if (np.shape(complete_samples)[0] >= nf_time*500):
         if (t2-t1 >= NF_time):# total time for nf session
         
-            print (t2-t3)
-            media.pause()
+            #print (t2-t3)
+            #media.pause()
             check = False
             media.stop()
             
