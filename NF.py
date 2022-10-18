@@ -1,8 +1,4 @@
 
-from IPython import get_ipython; 
-get_ipython().magic('reset -sf')# to clear all variables 
-
-
 from pylsl import StreamInlet, resolve_stream
 import numpy as np
 import pandas as pd
