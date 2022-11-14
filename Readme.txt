@@ -1,6 +1,6 @@
 Important Notes:
 
-Install Anaconda Python 3
+Install Anaconda Python 3.6 or 3.7
 Install VLC Media Player
 Bit version (either 32 bit or 64 bit) should be same for Anaconda Python and VLC Media Player
 When you complete with the installation,
