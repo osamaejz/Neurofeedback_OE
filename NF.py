@@ -62,8 +62,8 @@ try:
     print("looking for an EEG stream...")
     
     media.play()
-    # time.sleep(2)
-    # media.pause()
+    time.sleep(2)
+    media.pause()
     
     streams = resolve_stream('type', 'EEG')
     # create a new inlet to read from the stream
