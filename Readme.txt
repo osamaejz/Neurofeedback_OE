@@ -30,3 +30,6 @@ Please follow the steps below when you are running Neurofeedback.
 		write 'python NF.py'  
 
 Note: Enter the same user name (same spelling and case) for both NF_Baseline.py and NF.py for each subject
+
+Author:
+* **Osama Ejaz** - [Github](https://github.com/osamaejz/)
