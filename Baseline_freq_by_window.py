@@ -21,7 +21,7 @@ buffer_data = buffer_data.tolist()
 
 for window in range(len(feedback_channel) - 2000):
     
-    pwelch = signal.welch(buffer_data, fs=Fs, window='hanning', nperseg=wL, noverlap=wL/2, nfft=wL)
+    pwelch = signal.welch(buffer_data, fs=Fs, window='hanning', nperseg=wL, noverlap=wL/2, nfft=wL) #replace 'hanning' with 'hann' if you are using the latest version (3.11) of python. 
     
     baseline_beta = pwelch[1][int(wL*15/Fs) : int((wL*20/Fs)) + 1] # +1 due to python run till last index -1  
     
